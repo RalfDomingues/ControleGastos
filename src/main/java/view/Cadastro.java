@@ -282,7 +282,17 @@ public class Cadastro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Salva um item no arquivo CSV.
+     * Ação do botão "Salvar Conta".
+     * <p>
+     * Este método captura o texto digitado no campo {@code tfContas}, valida se não está vazio
+     * e o adiciona ao arquivo CSV definido em {@code caminhoContas}. Após salvar, o campo de texto
+     * é limpo para nova entrada.
+     * </p>
+     *
+     * <p>Em caso de erro de escrita no arquivo, uma mensagem de erro é exibida ao usuário
+     * por meio de um {@link JOptionPane}.</p>
+     *
+     * @param evt o evento de clique do botão
      */
     private void btContasSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContasSalvarActionPerformed
         String valor = tfContas.getText().trim();
@@ -301,7 +311,20 @@ public class Cadastro extends javax.swing.JFrame {
     }//GEN-LAST:event_btContasSalvarActionPerformed
 
     /**
-     * Alterna visibilidade da tabela e atualiza os dados.
+     * Ação do botão "Exibir Conta".
+     * <p>
+     * Alterna a visibilidade do painel {@code spTabelaContas}. Se o painel for exibido,
+     * o método lê todas as contas do arquivo CSV definido em {@code caminhoContas} e
+     * popula a tabela {@code tbTabelaContas} com os dados.
+     * </p>
+     *
+     * <p>Em caso de erro de leitura do arquivo, uma mensagem de erro é exibida
+     * utilizando {@link JOptionPane}.</p>
+     *
+     * <p>Após alterar a visibilidade e atualizar os dados, o layout é reajustado
+     * chamando {@code revalidate()}, {@code repaint()} e {@code pack()}.</p>
+     *
+     * @param evt o evento de clique do botão
      */
     private void btContasExibirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContasExibirActionPerformed
         spTabelaContas.setVisible(!spTabelaContas.isVisible());
@@ -332,8 +355,21 @@ public class Cadastro extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btContasExibirActionPerformed
+    
     /**
-     * Exclui item específico do CSV.
+     * Ação do botão "Excluir Conta".
+     * <p>
+     * Solicita ao usuário o nome da conta a ser excluída através de um {@link JOptionPane}.
+     * O método então lê o arquivo CSV definido em {@code caminhoContas}, remove a linha
+     * correspondente à conta informada e regrava o arquivo com as contas restantes.
+     * </p>
+     *
+     * <p>Se o arquivo não existir ou a conta não for encontrada, uma mensagem de aviso
+     * é exibida ao usuário. Após a exclusão bem-sucedida, a lista de contas na interface
+     * é atualizada chamando {@link #carregarContas()}, e o layout é reajustado com
+     * {@code revalidate()}, {@code repaint()} e {@code pack()}.</p>
+     *
+     * @param evt o evento de clique do botão
      */
     private void btContasExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContasExcluirActionPerformed
         String nome = JOptionPane.showInputDialog(this, "Digite o nome da Conta a excluir:");
@@ -386,23 +422,39 @@ public class Cadastro extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btContasExcluirActionPerformed
 
-    /**
-     * Lê e exibe categorias.
-     */
+   /**
+    * Lê o arquivo de categorias e exibe os dados na tabela {@code tbTabelaCategorias}.
+    * <p>
+    * Internamente, chama {@link #carregarTabela(String, String, JTable)} passando
+    * o caminho do arquivo de categorias, o nome da coluna e a tabela correspondente.
+    * </p>
+    */
     private void carregarCategorias() {
         carregarTabela(caminhoCategorias, "Categoria", tbTabelaCategorias);
     }
 
-    /**
-     * Lê e exibe contas.
-     */
+   /**
+    * Lê o arquivo de contas e exibe os dados na tabela {@code tbTabelaContas}.
+    * <p>
+    * Internamente, chama {@link #carregarTabela(String, String, JTable)} passando
+    * o caminho do arquivo de contas, o nome da coluna e a tabela correspondente.
+    * </p>
+    */
     private void carregarContas() {
         carregarTabela(caminhoContas, "Conta", tbTabelaContas);
     }
 
-    /**
-     * Preenche a tabela com os dados do arquivo CSV.
-     */
+   /**
+    * Carrega os dados de um arquivo CSV e preenche a JTable informada.
+    * <p>
+    * Cada linha do arquivo é adicionada como uma linha na tabela, e o cabeçalho da
+    * coluna é definido pelo parâmetro {@code coluna}.
+    * </p>
+    *
+    * @param caminho caminho do arquivo CSV a ser lido
+    * @param coluna  nome da coluna que será exibida na tabela
+    * @param tabela  JTable que receberá os dados
+    */
     private void carregarTabela(String caminho, String coluna, JTable tabela) {
         List<String> dados = CsvUtil.lerArquivo(caminho);
         DefaultTableModel modelo = new DefaultTableModel(new Object[]{coluna}, 0);
@@ -410,9 +462,20 @@ public class Cadastro extends javax.swing.JFrame {
         tabela.setModel(modelo);
     }
 
-    /**
-     * Limpa o arquivo CSV correspondente.
-     */
+   /**
+    * Ação do botão "Resetar Contas".
+    * <p>
+    * Solicita ao usuário uma confirmação para apagar todas as contas do arquivo CSV
+    * definido em {@code caminhoContas}. Caso o usuário confirme, o arquivo é limpo
+    * e a tabela {@code tbTabelaContas} é atualizada.
+    * </p>
+    *
+    * <p>Em caso de erro de escrita no arquivo, uma mensagem de erro é exibida utilizando
+    * {@link JOptionPane}. Após a limpeza, o layout da interface é reajustado chamando
+    * {@code revalidate()}, {@code repaint()} e {@code pack()}.</p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btContasResetarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContasResetarActionPerformed
         int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja apagar tudo?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirmacao == JOptionPane.YES_OPTION) {
@@ -434,6 +497,19 @@ public class Cadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfCategoriaActionPerformed
 
+    
+   /**
+    * Ação do botão "Salvar Categoria".
+    * <p>
+    * Captura o texto do campo {@code tfCategoria}, valida se não está vazio e adiciona
+    * a categoria ao arquivo CSV definido em {@code caminhoCategorias}. Após salvar, limpa
+    * o campo de texto.
+    * </p>
+    *
+    * <p>Em caso de erro de escrita, exibe uma mensagem utilizando {@link JOptionPane}.</p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btSalvarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarCategoriaActionPerformed
         String valor = tfCategoria.getText().trim();
         if (valor.isEmpty()) {
@@ -449,7 +525,20 @@ public class Cadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao salvar categoria: " + e.getMessage());
         }
     }//GEN-LAST:event_btSalvarCategoriaActionPerformed
-
+    
+    
+   /**
+    * Ação do botão "Exibir Categoria".
+    * <p>
+    * Alterna a visibilidade do painel {@code spTabelaCategorias}. Se o painel for exibido,
+    * lê todas as categorias do CSV {@code caminhoCategorias} e popula a tabela {@code tbTabelaCategorias}.
+    * </p>
+    *
+    * <p>Em caso de erro de leitura, exibe uma mensagem utilizando {@link JOptionPane}.
+    * Após atualizar os dados, o layout é reajustado com {@code revalidate()}, {@code repaint()} e {@code pack()}.</p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btExibirCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExibirCategoriaActionPerformed
         spTabelaCategorias.setVisible(!spTabelaCategorias.isVisible());
         if (spTabelaCategorias.isVisible()) {
@@ -476,7 +565,19 @@ public class Cadastro extends javax.swing.JFrame {
         pack();
 
     }//GEN-LAST:event_btExibirCategoriaActionPerformed
-
+    
+   /**
+    * Ação do botão "Excluir Categoria".
+    * <p>
+    * Solicita ao usuário o nome da categoria a ser excluída via {@link JOptionPane}.
+    * Remove a categoria do CSV {@code caminhoCategorias} e atualiza a tabela {@code tbTabelaCategorias}.
+    * </p>
+    *
+    * <p>Se o arquivo não existir ou a categoria não for encontrada, exibe uma mensagem de aviso.
+    * Após exclusão, o layout é reajustado com {@code revalidate()}, {@code repaint()} e {@code pack()}.</p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btCategoriasExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCategoriasExcluirActionPerformed
         String nome = JOptionPane.showInputDialog(this, "Digite o nome da Categoria a excluir:");
         if (nome == null || nome.trim().isEmpty()) {
@@ -526,7 +627,19 @@ public class Cadastro extends javax.swing.JFrame {
         repaint();
         pack();
     }//GEN-LAST:event_btCategoriasExcluirActionPerformed
-
+    
+   /**
+    * Ação do botão "Resetar Categorias".
+    * <p>
+    * Solicita confirmação do usuário para apagar todas as categorias do CSV {@code caminhoCategorias}.
+    * Caso confirmado, limpa o arquivo e atualiza a tabela {@code tbTabelaCategorias}.
+    * </p>
+    *
+    * <p>Em caso de erro de escrita, exibe uma mensagem utilizando {@link JOptionPane}.
+    * Após a limpeza, o layout é reajustado com {@code revalidate()}, {@code repaint()} e {@code pack()}.</p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btCategoriasResetarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCategoriasResetarActionPerformed
         int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja apagar tudo?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirmacao == JOptionPane.YES_OPTION) {

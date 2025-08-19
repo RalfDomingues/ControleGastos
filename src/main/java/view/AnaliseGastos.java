@@ -5,44 +5,18 @@
 package view;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.chart.*;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -52,22 +26,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Classe responsável por analisar os gastos cadastrados no sistema.
+ * Permite gerar relatórios e sumarizar despesas.
  * @author Ralf
  */
 public class AnaliseGastos extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AnaliseGastos.class.getName());
     private final String caminhoLancamentos = System.getProperty("user.dir") + "/src/main/java/dados/lancamentos.csv";
     private JTable tabelaContas;
-    private DefaultCategoryDataset datasetLinhas;
-    private JFreeChart graficoLinhas;
-    private ChartPanel painelLinhas;
-    private DefaultPieDataset datasetPizza;
-    private JFreeChart graficoPizza;
-    private ChartPanel painelPizza;
 
-    private JComboBox<String> filtroMes;
 
     /**
      * Creates new form AnaliseGastos
@@ -130,6 +97,27 @@ public class AnaliseGastos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /**
+     * Cria e retorna um painel contendo um gráfico de pizza com a distribuição dos gastos
+     * por categoria, baseado nos registros de despesas armazenados em um arquivo CSV.
+     * <p>
+     * O método realiza as seguintes etapas:
+     * <ul>
+     *   <li>Lê o arquivo CSV definido em {@code caminhoLancamentos};</li>
+     *   <li>Filtra apenas os registros cujo tipo seja "Despesa";</li>
+     *   <li>Converte os valores monetários para {@code double} (substituindo vírgula por ponto);</li>
+     *   <li>Acumula os valores por categoria em um {@link Map};</li>
+     *   <li>Popula o dataset do gráfico com as somas por categoria;</li>
+     *   <li>Cria um gráfico de pizza usando a biblioteca {@link JFreeChart};</li>
+     *   <li>Retorna um {@link ChartPanel} que pode ser exibido em uma interface Swing.</li>
+     * </ul>
+     *
+     * <p>Em caso de erro na leitura do arquivo, uma mensagem de erro é exibida ao usuário
+     * através de um {@link JOptionPane}.</p>
+     *
+     * @return um {@link ChartPanel} contendo o gráfico de pizza "Gastos por Categoria"
+     */
     private ChartPanel criarPainelGraficoPizza() {
         DefaultPieDataset dataset = new DefaultPieDataset();
         Map<String, Double> somaPorCategoria = new HashMap<>();
@@ -172,7 +160,25 @@ public class AnaliseGastos extends javax.swing.JFrame {
         );
         return new ChartPanel(graficoPizza);
     }
-
+    
+    /**
+     * Atualiza a tabela de contas exibida na interface com os saldos recalculados
+     * a partir dos lançamentos registrados em um arquivo CSV.
+     * <p>
+     * O método realiza as seguintes etapas:
+     * <ul>
+     *   <li>Lê o arquivo CSV definido em {@code caminhoLancamentos};</li>
+     *   <li>Interpreta cada linha como um lançamento contendo tipo, valor e conta;</li>
+     *   <li>Se o tipo for "Despesa", subtrai o valor do saldo da conta correspondente;</li>
+     *   <li>Se for outro tipo (ex.: Receita), adiciona o valor ao saldo da conta;</li>
+     *   <li>Armazena os saldos em um {@link Map}, indexados pelo nome da conta;</li>
+     *   <li>Atualiza o {@link DefaultTableModel} associado à {@code tabelaContas},
+     *       limpando os dados antigos e inserindo os novos saldos formatados com duas casas decimais.</li>
+     * </ul>
+     *
+     * <p>Em caso de erro na leitura do arquivo, uma mensagem é exibida ao usuário
+     * por meio de um {@link JOptionPane}.</p>
+     */
     private void atualizarTabelaContas() {
         Map<String, Double> saldoPorConta = new HashMap<>();
 
@@ -208,6 +214,28 @@ public class AnaliseGastos extends javax.swing.JFrame {
         saldoPorConta.forEach((conta, saldo) -> modelo.addRow(new Object[]{conta, String.format("%.2f", saldo)}));
     }
 
+    /**
+     * Cria e retorna um painel contendo um gráfico de linhas representando o fluxo
+     * financeiro mensal (receitas, despesas e saldo), com base nos registros do arquivo CSV.
+     * <p>
+     * O método realiza as seguintes etapas:
+     * <ul>
+     *   <li>Lê o arquivo CSV definido em {@code caminhoLancamentos};</li>
+     *   <li>Interpreta cada linha como um lançamento contendo tipo, valor e data;</li>
+     *   <li>Converte a data para {@link LocalDate} e agrupa os valores por mês/ano;</li>
+     *   <li>Soma receitas e despesas separadamente para cada mês;</li>
+     *   <li>Calcula o saldo mensal (receita - despesa);</li>
+     *   <li>Popula um {@link DefaultCategoryDataset} com os valores de receitas, despesas e saldo;</li>
+     *   <li>Cria um gráfico de linhas usando {@link JFreeChart} e aplica configurações de renderização
+     *       (exibição de pontos e rótulos nos dados);</li>
+     *   <li>Configura o {@link ChartPanel} resultante com tamanho preferencial e suporte a zoom via scroll do mouse.</li>
+     * </ul>
+     *
+     * <p>Em caso de erro na leitura do CSV, uma mensagem de erro é exibida ao usuário
+     * utilizando {@link JOptionPane}.</p>
+     *
+     * @return um {@link ChartPanel} contendo o gráfico de linhas "Fluxo Financeiro Mensal"
+     */
     private ChartPanel criarPainelGraficoLinhas() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         Map<String, Double> receitasMensal = new HashMap<>();

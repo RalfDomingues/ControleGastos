@@ -4,10 +4,15 @@
  */
 package view;
 
-import view.AnaliseGastos;
-
 /**
- *
+ * Classe principal da aplicação de gestão financeira.
+ * <p>
+ * Esta classe implementa a interface principal (JFrame) do sistema,
+ * contendo botões para navegação entre telas de lançamentos, cadastro,
+ * análise de gastos, bem como gerenciamento de contas e categorias.
+ * Todas as ações de botões são tratadas nesta classe.
+ * </p>
+ * 
  * @author Ralf
  */
 public class TelaPrincipal extends javax.swing.JFrame {
@@ -105,17 +110,44 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+   /**
+    * Ação do botão "Lançamentos".
+    * <p>
+    * Abre a tela de lançamentos financeiros criando uma nova instância
+    * de {@link Lancamento} e tornando-a visível.
+    * </p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btLancamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLancamentosActionPerformed
         Lancamento lancamentoView = new Lancamento();
         lancamentoView.setVisible(true);
     }//GEN-LAST:event_btLancamentosActionPerformed
-
+    
+   /**
+    * Ação do botão "Cadastro".
+    * <p>
+    * Abre a tela de cadastro de contas e categorias criando uma nova instância
+    * de {@link Cadastro} e tornando-a visível.
+    * </p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastroActionPerformed
         Cadastro gestaoView = new Cadastro();
         gestaoView.setVisible(true);
     }//GEN-LAST:event_btCadastroActionPerformed
-
+    
+   /**
+    * Ação do botão "Análise de Gastos".
+    * <p>
+    * Abre a tela de análise financeira criando uma nova instância
+    * de {@link AnaliseGastos} e tornando-a visível.
+    * </p>
+    *
+    * @param evt o evento de clique do botão
+    */
     private void btAnaliseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAnaliseActionPerformed
         AnaliseGastos analiseView = new AnaliseGastos();
         analiseView.setVisible(true);

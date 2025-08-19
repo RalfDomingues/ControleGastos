@@ -7,7 +7,6 @@ package view;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,12 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import util.CsvUtil;
 
 /**
- *
+ * Tela de lançamentos financeiros.
+ * <p>
+ * Esta classe implementa uma interface (JFrame) para registrar novos lançamentos
+ * de receitas e despesas. Permite ao usuário inserir informações como tipo,
+ * valor, data, categoria e conta, salvando os dados em arquivos CSV.
+ * </p>
+ * 
  * @author Ralf
  */
 public class Lancamento extends javax.swing.JFrame {
@@ -215,6 +217,16 @@ public class Lancamento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbTipoActionPerformed
 
+
+    /**
+     * Limpa todos os campos da tela de lançamento.
+     * <p>
+     * Este método reseta os campos de data, descrição, valor e as JComboBox de
+     * categoria, conta, tipo e pagamento, deixando a tela pronta para um novo lançamento.
+     * </p>
+     * 
+     * @param evt Evento de ação gerado pelo botão "Limpar"
+     */
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
 
         ftfData.setText("");
@@ -227,6 +239,16 @@ public class Lancamento extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btLimparActionPerformed
 
+   /**
+    * Salva um novo lançamento financeiro.
+    * <p>
+    * Este método valida os campos obrigatórios (descrição, data e valor), cria uma
+    * linha CSV com os dados do lançamento e adiciona ao arquivo de lançamentos.
+    * Após o salvamento, todos os campos são limpos.
+    * </p>
+    * 
+    * @param evt Evento de ação gerado pelo botão "Salvar"
+    */
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
 
         try {
@@ -289,6 +311,16 @@ public class Lancamento extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btSalvarActionPerformed
 
+   /**
+    * Deleta um lançamento existente com base na descrição informada.
+    * <p>
+    * Este método solicita a confirmação do usuário e, se confirmada, lê o arquivo
+    * de lançamentos, copia todos os lançamentos exceto aquele com a descrição
+    * informada para um arquivo temporário, depois substitui o arquivo original.
+    * </p>
+    * 
+    * @param evt Evento de ação gerado pelo botão "Deletar"
+    */
     private void btDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeletarActionPerformed
         String descricaoParaDeletar = taDescricao.getText().trim();
         if (descricaoParaDeletar.isEmpty()) {
@@ -362,10 +394,13 @@ public class Lancamento extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Lancamento().setVisible(true));
     }
 
-    /**
-     * Lê um arquivo CSV simples (uma coluna por linha) e retorna uma lista de
-     * strings.
-     */
+   /**
+    * Lê um arquivo CSV simples (uma coluna por linha) e retorna uma lista de
+    * strings representando cada linha não vazia do arquivo.
+    *
+    * @param caminhoArquivo Caminho do arquivo CSV a ser lido.
+    * @return Lista de strings contendo os dados lidos do CSV.
+    */
     private List<String> lerCSV(String caminhoArquivo) {
         List<String> lista = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
@@ -382,9 +417,11 @@ public class Lancamento extends javax.swing.JFrame {
         return lista;
     }
 
-    /**
-     * Carrega os JComboBox com os dados lidos dos CSVs.
-     */
+   /**
+    * Carrega os JComboBox de categoria e conta com os dados lidos de seus
+    * respectivos arquivos CSV. Os JComboBox são preenchidos com os itens
+    * presentes nos arquivos.
+    */
     private void carregarComboBoxDeCSV() {
         // Troque pelos caminhos reais dos seus arquivos CSV:
 
@@ -395,9 +432,12 @@ public class Lancamento extends javax.swing.JFrame {
         carregarComboBox(cbConta, contas);
     }
 
-    /**
-     * Popula um JComboBox com os itens da lista.
-     */
+   /**
+    * Popula um JComboBox com os itens fornecidos em uma lista.
+    *
+    * @param combo JComboBox a ser preenchido.
+    * @param itens Lista de strings que serão adicionadas ao JComboBox.
+    */
     private void carregarComboBox(JComboBox<String> combo, List<String> itens) {
         combo.removeAllItems();
         for (String item : itens) {
