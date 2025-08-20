@@ -1,27 +1,23 @@
-Sistema de Gestão Financeira – Controle de Gastos
-📋 Descrição
+# 💰 Sistema de Gestão Financeira
 
-Este projeto é um sistema de gestão financeira desenvolvido em Java (Swing) para auxiliar no controle de gastos de forma simples e intuitiva.
-Com ele, o usuário pode registrar despesas e receitas, visualizar um resumo dos gastos e manter um acompanhamento organizado de suas finanças.
+Este projeto é um **sistema de gestão financeira** simples, desenvolvido para controle de gastos pessoais e visão clara das finanças. Permite registrar contas, categorias, receitas e despesas de maneira prática.
 
-🚀 Funcionalidades
+---
 
-Cadastro de gastos e receitas com campos personalizados.
+## ⚙️ Funcionalidades
 
-Edição e exclusão de registros financeiros.
+- Registrar contas financeiras (bancos, carteiras, etc.).  
+- Adicionar categorias de gastos e receitas.  
+- Registrar despesas e receitas associadas a categorias.  
+- Visualizar relatórios e totais de gastos de forma simplificada.  
+- Salvar e carregar dados em arquivos CSV para fácil gerenciamento.  
 
-Resumo simples para facilitar a análise dos gastos.
+---
 
-Interface gráfica amigável construída com Java Swing.
+## 🚀 Como Usar
 
-Armazenamento de dados local via arquivos CSV (ou outro formato que o projeto esteja usando).
-
-🛠️ Tecnologias Utilizadas
-
-Java 17+
-
-Java Swing (interface gráfica)
-
-Manipulação de arquivos CSV
-
-NetBeans para design das telas (.form)
+1. Clone ou faça download do projeto.  
+2. Abra o projeto em uma IDE compatível com Java (ex: NetBeans ou IntelliJ IDEA).  
+3. Compile e execute o arquivo principal:  
+   ```java
+   GerenciarContaCategoria.java
